@@ -4,6 +4,9 @@
 # A version that is not touching the infrastructure.
 
 
+OUTPUT_FILE="./output.csv"
+test -f $OUTPUT_FILE && rm $OUTPUT_FILE
+
 # a role that will be reassigned
 ROLE_NAME="_member_"
 openstack_chosen_role=`openstack role list -f value | grep $ROLE_NAME | awk {' print $1 '}`
@@ -35,7 +38,9 @@ do
 			echo "WARNING: User $openstack_id ($openstack_user_name) has the role $openstack_chosen_role assigned already within project $openstack_project_id. Skipping..."
 		else
 			echo "DEBUG: I want to assign the user $openstack_id ($openstack_user_name) the role $openstack_chosen_role (${ROLE_NAME}) within $openstack_project_id tenant."
-			echo "openstack role add --user $openstack_id --project $openstack_project_id $openstack_chosen_role"
+			#echo "openstack role add --user $openstack_id --project $openstack_project_id $openstack_chosen_role"
+			# write user, project and role UUID to a file
+			echo "$openstack_id,$openstack_project_id,$openstack_chosen_role" >> $OUTPUT_FILE
 		fi
 	fi
 done
