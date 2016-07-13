@@ -34,7 +34,8 @@ do
 	# gets both user id and project id
 	# and sets them into variables with "openstack_" prefix
 	eval `openstack user show $user -f shell --prefix openstack_ | grep id`
-	openstack_user_name=`openstack user list -f value | grep $openstack_id | awk {' print $2 '}`
+	# uncomment the below line to see user names together with UUIDs
+	#openstack_user_name=`openstack user list -f value | grep $openstack_id | awk {' print $2 '}`
 	echo "DEBUG: Current user id is $openstack_id ($openstack_user_name)."
 	# check if variables are not empty
 	test $user != $openstack_id && echo "ERROR: User id $user differs from this from the openstack command $openstack_id" && exit
