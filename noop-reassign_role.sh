@@ -3,9 +3,19 @@
 # A script to reassign a role to all the user-tenant relationships.
 # A version that is not touching the infrastructure.
 
-
+# a file where informations about reassignable users and are stored
 OUTPUT_FILE="./output.csv"
 test -f $OUTPUT_FILE && rm $OUTPUT_FILE
+echo "user UUID,project UUID,role UUID" > $OUTPUT_FILE
+# a file where users without projects are stored
+NOPRO_FILE="./output_noproject.csv"
+test -f $NOPRO_FILE && rm $NOPRO_FILE
+echo "user UUID,role UUID" > $NOPRO_FILE
+# a file with users already heaving the role
+ROLED_FILE="./output_already_assigned.csv"
+test -f $ROLED_FILE && rm $ROLED_FILE
+echo "user UUID,project UUID,role UUID" > $ROLED_FILE
+
 
 # a role that will be reassigned
 ROLE_NAME="_member_"
@@ -31,11 +41,13 @@ do
 	if [[ -z $openstack_project_id ]]
 	then
 		echo "WARNING: User $openstack_id ($openstack_user_name) is not assigned to a project (this can be OK for users like nova). Skipping..."
+		echo "$openstack_id,$openstack_chosen_role" >> $NOPRO_FILE
 	else
 		# check if the user has a role assigned already
 		if [[ -n  `openstack user role list $openstack_id --project $openstack_project_id | grep $openstack_chosen_role` ]]
 		then
 			echo "WARNING: User $openstack_id ($openstack_user_name) has the role $openstack_chosen_role assigned already within project $openstack_project_id. Skipping..."
+			echo "$openstack_id,$openstack_project_id,$openstack_chosen_role" >> $ROLED_FILE
 		else
 			echo "DEBUG: I want to assign the user $openstack_id ($openstack_user_name) the role $openstack_chosen_role (${ROLE_NAME}) within $openstack_project_id tenant."
 			#echo "openstack role add --user $openstack_id --project $openstack_project_id $openstack_chosen_role"
