@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -x
+#set -x
 
 if [[ $@ -ne 1 ]] 
 then
@@ -30,4 +30,4 @@ do
 done < $INPUT_STRONGHOLD
 IFS=$OLDIFS
 
-set -
+#set -
