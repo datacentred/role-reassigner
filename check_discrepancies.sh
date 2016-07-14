@@ -2,7 +2,7 @@
 
 #set -x
 
-if [[ $@ -ne 1 ]] 
+if [[ $# -ne 1 ]] 
 then
     echo "usage: $0 <stronghold_input>"; exit 1
 fi
