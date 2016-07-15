@@ -36,9 +36,9 @@ do
     then
         echo "$user_id,$project_id,$role_id" >> $OUTPUT_CONF
         echo "I want to execute: openstack role add --user $user_id --project $project_id $openstack_chosen_role"
-        read -r -p "Are you sure? [y/n] "
-        if [[ $REPLY =~ ^[Yy]$ ]]
-        then
+        read -r -p "Are you sure? [Y/n] " response
+        response=${response,,} # tolower
+        if [[ $response =~ ^(yes|y| ) ]]; then
             # execute the command
             echo "Executing the comand (yeah, not really)"
         fi
