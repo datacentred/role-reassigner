@@ -23,15 +23,15 @@ rolesmap=( `$OPENSTACK role list -f value | tr ' '  :` )
 # replace UUIDs from 1st column
 for item in "${usersmap[@]}"
 do
-    awk -v pattern=${item%%:*} -v replace=${item##*:} -v file=$OUTPUT_NAMES 'BEGIN{ FS=","; OFS="," } { gsub(pattern,replace,$1); print > file }' $OUTPUT_NAMES
+    cat $OUTPUT_NAMES | awk -v pattern=${item%%:*} -v replace=${item##*:} -v file=$OUTPUT_NAMES 'BEGIN{ FS=","; OFS="," } { gsub(pattern,replace,$1); print > file }'
 done
 # replace UUIDs from 2nd column
 for item in "${projectsmap[@]}"
 do
-    awk -v pattern=${item%%:*} -v replace=${item##*:} -v file=$OUTPUT_NAMES 'BEGIN{ FS=","; OFS="," } { gsub(pattern,replace,$2); print > file }' $OUTPUT_NAMES
+    cat $OUTPUT_NAMES | awk -v pattern=${item%%:*} -v replace=${item##*:} -v file=$OUTPUT_NAMES 'BEGIN{ FS=","; OFS="," } { gsub(pattern,replace,$2); print > file }'
 done
 # replace UUIDs from 3rd column
 for item in "${rolesmap[@]}"
 do
-    awk -v pattern=${item%%:*} -v replace=${item##*:} -v file=$OUTPUT_NAMES 'BEGIN{ FS=","; OFS="," } { gsub(pattern,replace,$3); print > file }' $OUTPUT_NAMES
+    cat $OUTPUT_NAMES | awk -v pattern=${item%%:*} -v replace=${item##*:} -v file=$OUTPUT_NAMES 'BEGIN{ FS=","; OFS="," } { gsub(pattern,replace,$3); print > file }'
 done
